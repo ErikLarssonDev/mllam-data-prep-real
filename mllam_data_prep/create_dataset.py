@@ -11,8 +11,8 @@ from packaging.version import Version
 
 from . import __version__
 from .config import Config, InvalidConfigException
+from .ops.cropping import crop_to_within_convex_hull_margin
 from .ops.chunking import chunk_dataset
-from .ops.cropping import crop_with_convex_hull
 from .ops.derive_variable import derive_variable
 from .ops.loading import load_input_dataset
 from .ops.mapping import map_dims_and_variables
