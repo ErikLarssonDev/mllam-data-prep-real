@@ -12,7 +12,7 @@ import xarray as xr
 from loguru import logger
 
 
-def calculate_toa_radiation(lat, lon, time):
+def calculate_toa_radiation(lat, lon, time, lead_time=None):
     """
     Function for calculating top-of-atmosphere incoming radiation
 
@@ -24,6 +24,9 @@ def calculate_toa_radiation(lat, lon, time):
         Longitude values. Should be in the range [-180, 180] or [0, 360]
     time : Union[xr.DataArray, datetime.datetime]
         Time
+    lead_time : xr.DataArray
+        If given, assume time is an analysis time and lead_time a lead time
+        of a forecast. Compute radiation at each lead_time.
 
     Returns
     -------
@@ -35,13 +38,19 @@ def calculate_toa_radiation(lat, lon, time):
     # Solar constant
     solar_constant = 1366  # W*m**-2
 
+    # Determine set of times to compute rad for
+    if lead_time is not None:
+        eval_times = time + lead_time
+    else:
+        eval_times = time
+
     # Different handling if xr.DataArray or datetime object
-    if isinstance(time, xr.DataArray):
-        day = time.dt.dayofyear
-        hour_utc = time.dt.hour
-    elif isinstance(time, datetime.datetime):
-        day = time.timetuple().tm_yday
-        hour_utc = time.hour
+    if isinstance(eval_times, xr.DataArray):
+        day = eval_times.dt.dayofyear
+        hour_utc = eval_times.dt.hour
+    elif isinstance(eval_times, datetime.datetime):
+        day = eval_times.timetuple().tm_yday
+        hour_utc = eval_times.hour
     else:
         raise TypeError(
             "Expected an instance of xr.DataArray or datetime object,"

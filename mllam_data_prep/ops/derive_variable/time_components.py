@@ -9,7 +9,7 @@ import xarray as xr
 from loguru import logger
 
 
-def calculate_hour_of_day(time, component):
+def calculate_hour_of_day(time, component, lead_time=None):
     """
     Function for calculating hour of day features with a cyclic encoding
 
@@ -20,6 +20,9 @@ def calculate_hour_of_day(time, component):
     component: str
         String indicating if the sine or cosine component of the encoding
         should be returned
+    lead_time : xr.DataArray
+        If given, assume time is an analysis time and lead_time a lead time
+        of a forecast. Compute feature at each lead_time.
 
     Returns
     -------
@@ -28,15 +31,21 @@ def calculate_hour_of_day(time, component):
     """
     logger.info("Calculating hour of day")
 
+    # Determine set of times to compute for
+    if lead_time is not None:
+        eval_times = time + lead_time
+    else:
+        eval_times = time
+
     # Get the hour of the day
-    if isinstance(time, xr.DataArray):
-        hour_of_day = time.dt.hour
-    elif isinstance(time, datetime.datetime):
-        hour_of_day = time.hour
+    if isinstance(eval_times, xr.DataArray):
+        hour_of_day = eval_times.dt.hour
+    elif isinstance(eval_times, datetime.datetime):
+        hour_of_day = eval_times.hour
     else:
         raise TypeError(
             "Expected an instance of xr.DataArray or datetime object,"
-            f" but got {type(time)}."
+            f" but got {type(eval_times)}."
         )
 
     # Cyclic encoding of hour of day
@@ -61,7 +70,7 @@ def calculate_hour_of_day(time, component):
     return hour_of_day_encoded
 
 
-def calculate_day_of_year(time, component):
+def calculate_day_of_year(time, component, lead_time=None):
     """
     Function for calculating day of year features with a cyclic encoding
 
@@ -80,15 +89,21 @@ def calculate_day_of_year(time, component):
     """
     logger.info("Calculating day of year")
 
+    # Determine set of times to compute for
+    if lead_time is not None:
+        eval_times = time + lead_time
+    else:
+        eval_times = time
+
     # Get the day of year
-    if isinstance(time, xr.DataArray):
-        day_of_year = time.dt.dayofyear
-    elif isinstance(time, datetime.datetime):
-        day_of_year = time.timetuple().tm_yday
+    if isinstance(eval_times, xr.DataArray):
+        day_of_year = eval_times.dt.dayofyear
+    elif isinstance(eval_times, datetime.datetime):
+        day_of_year = eval_times.timetuple().tm_yday
     else:
         raise TypeError(
             "Expected an instance of xr.DataArray or datetime object,"
-            f" but got {type(time)}."
+            f" but got {type(eval_times)}."
         )
 
     # Cyclic encoding of day of year - use 366 to include leap years!
