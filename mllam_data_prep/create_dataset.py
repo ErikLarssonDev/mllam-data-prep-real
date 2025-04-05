@@ -191,7 +191,7 @@ def create_dataset(config: Config):
                     ds=ds_input,
                     derived_variable=derived_variable,
                     chunking=chunking_config,
-                    target_dims=expected_input_var_dims
+                    target_dims=expected_input_var_dims,
                 )
 
         _check_dataset_attributes(
