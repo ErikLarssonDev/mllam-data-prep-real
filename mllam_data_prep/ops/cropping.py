@@ -320,7 +320,7 @@ def crop_rectangular_area(
     ds: xr.Dataset,
     ds_reference: xr.Dataset,
     grid_index_dim: str = "grid_index",
-    margin_thickness: float = 2.0, # 400000 m
+    margin_thickness: float = 400000, # 400000 m
     include_interior_points: bool = True,
     return_mask=False,
     config = None,
@@ -344,8 +344,8 @@ def crop_rectangular_area(
     #         semimajor_axis: 6367470.0
     #         semiminor_axis: 6367470.0
 
-    margin_thickness = 400000 # In meters for now, but we can change this to degrees later
-    # We need to convert the margin thickness from degrees to meters, otherwise we will not get a rectangular area in the DANRA projection?
+    # TODO: convert the margin thickness from degrees to meters, otherwise we will not get a rectangular area in the DANRA projection?
+    # Or can we just use the margin thickness in degrees and then convert it to meters when we project the points?
 
     if margin_thickness == 0.0:
         if not include_interior_points:

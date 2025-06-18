@@ -298,10 +298,10 @@ def create_dataset(config: Config):
         domain_cropping = config.output.domain_cropping
         ds_interior_domain = create_dataset(config=config_interior_domain)
         if domain_cropping.margin_width_degrees is None:
-            ds = crop_rectangular_area( # TODO: Make it an option to have convex hull cropping or rectangular cropping
+            ds = crop_rectangular_area( 
                 ds=ds,
                 ds_reference=ds_interior_domain,
-                margin_thickness=domain_cropping.margin_width_meters,
+                margin_thickness=domain_cropping.margin_width_meters, # Should it be possible to specify the margin in degrees?
                 include_interior_points=domain_cropping.include_interior_points,
                 config=config_interior_domain # Pass the config to the cropping function to get the projection for the interior domain
             )
