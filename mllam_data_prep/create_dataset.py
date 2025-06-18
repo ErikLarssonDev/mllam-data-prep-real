@@ -12,7 +12,7 @@ from packaging.version import Version
 from . import __version__
 from .config import Config, InvalidConfigException
 from .ops.chunking import chunk_dataset
-from .ops.cropping import crop_with_convex_hull
+from .ops.cropping import crop_with_convex_hull, crop_rectangular_area
 from .ops.derive_variable import derive_variable
 from .ops.loading import load_input_dataset
 from .ops.mapping import map_dims_and_variables
@@ -303,11 +303,12 @@ def create_dataset(config: Config):
             f"and including margin of {domain_cropping.margin_width_degrees} degrees) "
             f"of {config.output.domain_cropping.interior_dataset_config_path} dataset "
         )
-        ds = crop_with_convex_hull(
+        ds = crop_rectangular_area( # TODO: Make it an option to have convex hull cropping or rectangular cropping
             ds=ds,
             ds_reference=ds_interior_domain,
             margin_thickness=domain_cropping.margin_width_degrees,
             include_interior_points=domain_cropping.include_interior_points,
+            config=config_interior_domain # Pass the config to the cropping function to get the projection for the interior domain
         )
 
     ds.attrs = {}

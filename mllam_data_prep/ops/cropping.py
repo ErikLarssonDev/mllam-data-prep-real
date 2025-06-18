@@ -4,6 +4,7 @@ import numpy as np
 import spherical_geometry as sg
 import xarray as xr
 from spherical_geometry.polygon import SphericalPolygon
+import cartopy.crs as ccrs
 
 
 def _get_latlon_coords(da: xr.DataArray) -> tuple:
@@ -292,6 +293,123 @@ def _mask_with_common_dim(da_mask, ds):
     ds_masked = xr.merge([ds_masked, ds[vars_without_dims]])
     return ds_masked
 
+# TODO: Maybe we want to have a function that converts degrees to meters
+def degrees_to_meters(proj, center_lat, center_lon, margin_width_degrees):
+    # Move margin_width_degrees north in latitude
+    lat1, lon1 = center_lat, center_lon
+    lat2, lon2 = center_lat + margin_width_degrees, center_lon
+
+    # Project both points
+    x1, y1 = proj.transform_point(lon1, lat1, ccrs.PlateCarree())
+    x2, y2 = proj.transform_point(lon2, lat2, ccrs.PlateCarree())
+
+    # Distance in meters (in y direction)
+    margin_m_y = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+    # Move margin_width_degrees east in longitude
+    lat3, lon3 = center_lat, center_lon + margin_width_degrees
+    x3, y3 = proj.transform_point(lon3, lat3, ccrs.PlateCarree())
+
+    # Distance in meters (in x direction)
+    margin_m_x = np.sqrt((x3 - x1)**2 + (y3 - y1)**2)
+
+    # You can use the average or pick one depending on your use case
+    return margin_m_x, margin_m_y
+
+def crop_rectangular_area(
+    ds: xr.Dataset,
+    ds_reference: xr.Dataset,
+    grid_index_dim: str = "grid_index",
+    margin_thickness: float = 2.0, # 400000 m
+    include_interior_points: bool = True,
+    return_mask=False,
+    config = None,
+) -> xr.Dataset:
+    """
+    Crop grid points (with coordinates given in lat/lon) in `ds` that are
+    within a certain distance (within the margin of a given width) of the
+    rectangular area defined by the lat/lon coordinates of `ds_reference`.
+    The margin is measured in degrees (should maybe be in m?).
+    """
+
+    # The config contains the projection information
+    # extra:
+    # projection:
+    #     class_name: LambertConformal
+    #     kwargs:
+    #     central_longitude: 25.0
+    #     central_latitude: 56.7
+    #     standard_parallels: [56.7, 56.7]
+    #     globe:
+    #         semimajor_axis: 6367470.0
+    #         semiminor_axis: 6367470.0
+
+    margin_thickness = 400000
+
+    if margin_thickness == 0.0:
+        if not include_interior_points:
+            raise Exception(
+                "With no margin and exclude_interior=False, all points would be excluded."
+            )
+        da_mask = create_convex_hull_mask(ds=ds, ds_reference=ds_reference) # Skipping this for now as we are only interested in the case when margin_thickness > 0.0
+    else:
+        # TODO: Project ERA5 to DANRA grid
+        proj_kwargs = config["extra"]["projection"]["kwargs"]
+        globe = config["extra"]["projection"]["globe"]
+        globe_obj = ccrs.Globe(
+            semimajor_axis=globe["semimajor_axis"],
+            semiminor_axis=globe["semiminor_axis"],
+        )
+        proj = ccrs.LambertConformal(
+            central_longitude=proj_kwargs["central_longitude"],
+            central_latitude=proj_kwargs["central_latitude"],
+            standard_parallels=proj_kwargs["standard_parallels"],
+            globe=globe_obj,
+        )
+
+        # Get lat/lon from ds and ds_reference
+        ds_lat, ds_lon = _get_latlon_coords(ds)
+        ref_lat, ref_lon = _get_latlon_coords(ds_reference)
+
+        # Project to x/y ---
+        ds_x, ds_y = proj.transform_points(ccrs.PlateCarree(), ds_lon, ds_lat)[..., :2].T
+        ref_x, ref_y = proj.transform_points(ccrs.PlateCarree(), ref_lon, ref_lat)[..., :2].T
+
+        # TODO: Caclulate the distance between the interior and point on the boundary
+        min_x = ref_x.min() - margin_thickness
+        max_x = ref_x.max() + margin_thickness
+        min_y = ref_y.min() - margin_thickness
+        max_y = ref_y.max() + margin_thickness
+
+        # Create a mask for the points in ds that are within the margin of the rectangle
+        da_boundary_mask = (
+            (ds_x >= min_x) & (ds_x <= max_x) &
+            (ds_y >= min_y) & (ds_y <= max_y)
+        )
+
+        # Mask for the interior points
+        da_interor_mask = (
+            (ds_x >= ref_x.min()) & (ds_x <= ref_x.max()) &
+            (ds_y >= ref_y.min()) & (ds_y <= ref_y.max())
+        )
+
+    if not include_interior_points:
+        da_mask = da_boundary_mask & (~da_interor_mask)
+    else:
+        da_mask = da_boundary_mask
+
+    # it is unclear if there is a bug in xr.Dataset.where(), but its default
+    # behaviour seems to be broadcast (i.e. add) the dimensions of the mask to
+    # any data variables that don't have those dimensions already. We only want
+    # to mask the variables that share dimension(s) with the mask (i.e. have
+    # the `grid_index` dimension), so we drop the other variables before
+    # applying the mask.
+    ds_cropped = _mask_with_common_dim(da_mask=da_mask, ds=ds)
+
+    if return_mask:
+        return ds_cropped, da_mask
+
+    return ds_cropped
 
 def crop_with_convex_hull(
     ds: xr.Dataset,
