@@ -297,19 +297,32 @@ def create_dataset(config: Config):
     if config.output.domain_cropping is not None:
         domain_cropping = config.output.domain_cropping
         ds_interior_domain = create_dataset(config=config_interior_domain)
-        logger.info(
-            f"Cropping dataset using convex hull "
-            f"({'including' if domain_cropping.include_interior_points else 'excluding'} interior points "
-            f"and including margin of {domain_cropping.margin_width_degrees} degrees) "
-            f"of {config.output.domain_cropping.interior_dataset_config_path} dataset "
-        )
-        ds = crop_rectangular_area( # TODO: Make it an option to have convex hull cropping or rectangular cropping
-            ds=ds,
-            ds_reference=ds_interior_domain,
-            margin_thickness=domain_cropping.margin_width_degrees,
-            include_interior_points=domain_cropping.include_interior_points,
-            config=config_interior_domain # Pass the config to the cropping function to get the projection for the interior domain
-        )
+        if domain_cropping.margin_width_degrees is None:
+            ds = crop_rectangular_area( # TODO: Make it an option to have convex hull cropping or rectangular cropping
+                ds=ds,
+                ds_reference=ds_interior_domain,
+                margin_thickness=domain_cropping.margin_width_meters,
+                include_interior_points=domain_cropping.include_interior_points,
+                config=config_interior_domain # Pass the config to the cropping function to get the projection for the interior domain
+            )
+            logger.info(
+                f"Cropping dataset using margin of {domain_cropping.margin_width_meters} meters in projection space "
+                f"({'including' if domain_cropping.include_interior_points else 'excluding'} interior points "
+                f"of {config.output.domain_cropping.interior_dataset_config_path} dataset "
+            )
+        else:
+            logger.info(
+                f"Cropping dataset using convex hull "
+                f"({'including' if domain_cropping.include_interior_points else 'excluding'} interior points "
+                f"and including margin of {domain_cropping.margin_width_degrees} degrees) "
+                f"of {config.output.domain_cropping.interior_dataset_config_path} dataset "
+            )
+            ds = crop_with_convex_hull(
+                ds=ds,
+                ds_reference=ds_interior_domain,
+                margin_thickness=domain_cropping.margin_width_degrees,
+                include_interior_points=domain_cropping.include_interior_points,
+            )
 
     ds.attrs = {}
     ds.attrs["schema_version"] = config.schema_version

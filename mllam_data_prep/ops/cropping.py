@@ -344,7 +344,8 @@ def crop_rectangular_area(
     #         semimajor_axis: 6367470.0
     #         semiminor_axis: 6367470.0
 
-    margin_thickness = 400000
+    margin_thickness = 400000 # In meters for now, but we can change this to degrees later
+    # We need to convert the margin thickness from degrees to meters, otherwise we will not get a rectangular area in the DANRA projection?
 
     if margin_thickness == 0.0:
         if not include_interior_points:
@@ -353,9 +354,13 @@ def crop_rectangular_area(
             )
         da_mask = create_convex_hull_mask(ds=ds, ds_reference=ds_reference) # Skipping this for now as we are only interested in the case when margin_thickness > 0.0
     else:
-        # TODO: Project ERA5 to DANRA grid
-        proj_kwargs = config["extra"]["projection"]["kwargs"]
-        globe = config["extra"]["projection"]["globe"]
+        # Project ERA5 to DANRA grid
+        print("Projecting to DANRA grid")
+        print(f"Projection config: {config.extra}")
+        print(f"Projection globe: {config.extra['projection']}")
+        print(f"Projection class: {config.extra['projection']['class_name']}")
+        proj_kwargs = config.extra["projection"]["kwargs"]
+        globe = config.extra["projection"]["kwargs"]["globe"]
         globe_obj = ccrs.Globe(
             semimajor_axis=globe["semimajor_axis"],
             semiminor_axis=globe["semiminor_axis"],
@@ -375,7 +380,7 @@ def crop_rectangular_area(
         ds_x, ds_y = proj.transform_points(ccrs.PlateCarree(), ds_lon, ds_lat)[..., :2].T
         ref_x, ref_y = proj.transform_points(ccrs.PlateCarree(), ref_lon, ref_lat)[..., :2].T
 
-        # TODO: Caclulate the distance between the interior and point on the boundary
+        # Caclulate the outer corners for the boundary
         min_x = ref_x.min() - margin_thickness
         max_x = ref_x.max() + margin_thickness
         min_y = ref_y.min() - margin_thickness
@@ -393,10 +398,18 @@ def crop_rectangular_area(
             (ds_y >= ref_y.min()) & (ds_y <= ref_y.max())
         )
 
-    if not include_interior_points:
-        da_mask = da_boundary_mask & (~da_interor_mask)
-    else:
-        da_mask = da_boundary_mask
+        if not include_interior_points:
+            da_mask = xr.DataArray(
+                da_boundary_mask & (~da_interor_mask),
+                dims=(grid_index_dim,),
+                coords={grid_index_dim: ds[grid_index_dim]}
+            )
+        else:
+            da_mask = xr.DataArray(
+                da_boundary_mask,
+                dims=(grid_index_dim,),
+                coords={grid_index_dim: ds[grid_index_dim]}
+            )
 
     # it is unclear if there is a bug in xr.Dataset.where(), but its default
     # behaviour seems to be broadcast (i.e. add) the dimensions of the mask to

@@ -319,8 +319,9 @@ class ConvexHullCropping:
         Whether to include the points inside the convex hull of the interior dataset
     """
 
-    margin_width_degrees: float
     interior_dataset_config_path: str
+    margin_width_degrees: Optional[float] = None
+    margin_width_meters: Optional[float] = None
     include_interior_points: bool = False
 
 
