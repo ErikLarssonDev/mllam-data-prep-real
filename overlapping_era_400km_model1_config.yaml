@@ -29,7 +29,7 @@ output:
         end: 2020-10-29T00:00
   domain_cropping:
     # margin_width_degrees: 7.19
-    include_interior_points: False
+    include_interior_points: True
     margin_width_meters: 400000 # 400 km margin, same as 7 degrees
     interior_dataset_config_path: danra_model1_config.yaml
 
