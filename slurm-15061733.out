@@ -1,0 +1,40 @@
+***********************************
+You have loaded a Mambaforge module
+***********************************
+---------------------------------------------------------------------------------------------------
+NOTE: NSC strongly advices against placing 'mamba activate' (or 'conda
+activate', with or without
+      arguments) or conda initialize commands in your shell initialization
+files, (e.g. '.bashrc' or '.bash_profile') since
+      this severely alters the environment for running software in ways that
+cause unpredictable
+      issues that can be difficult to diagnose.
+---------------------------------------------------------------------------------------------------
+
+W&B online. Running your script from this directory will now sync to the cloud.
+2026-01-08 15:35:40.672 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_sl_state from /proj/berzelius-2022-164/weather/danra/danra_model1_single_levels.zarr
+2026-01-08 15:35:41.880 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset danra_sl_state
+2026-01-08 15:35:41.885 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_sl_state to state
+2026-01-08 15:35:43.249 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_pl_state from /proj/berzelius-2022-164/weather/danra/danra_model1_pressure_levels.zarr
+2026-01-08 15:35:43.273 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset danra_pl_state
+2026-01-08 15:35:44.484 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_pl_state to state
+2026-01-08 15:35:53.531 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_static from /proj/berzelius-2022-164/weather/danra/danra_v0.5.0_static_fields.zarr
+2026-01-08 15:35:53.573 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset danra_static
+2026-01-08 15:35:53.574 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_static to static
+2026-01-08 15:35:53.597 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_forcing from /proj/berzelius-2022-164/weather/danra/danra_model1_single_levels.zarr
+2026-01-08 15:35:53.664 | INFO     | mllam_data_prep.create_dataset:create_dataset:188 - Deriving variables from danra_forcing
+2026-01-08 15:35:53.677 | INFO     | mllam_data_prep.ops.derive_variable.physical_field:calculate_toa_radiation:36 - Calculating top-of-atmosphere incoming radiation
+2026-01-08 15:36:10.847 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+2026-01-08 15:36:23.114 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+2026-01-08 15:36:35.917 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+2026-01-08 15:36:46.079 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+2026-01-08 15:36:59.099 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_forcing to forcing
+2026-01-08 15:37:04.879 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `state`
+2026-01-08 15:37:05.055 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `static`
+2026-01-08 15:37:05.058 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `forcing`
+2026-01-08 15:37:05.331 | INFO     | mllam_data_prep.create_dataset:create_dataset:251 - Chunking dataset with {'time': 1, 'state_feature': 20}
+2026-01-08 15:38:12.246 | INFO     | mllam_data_prep.create_dataset:create_dataset:259 - Setting splitting information to define `['train', 'val', 'test']` splits along dimension `time`
+2026-01-08 15:38:12.951 | INFO     | mllam_data_prep.create_dataset:create_dataset:269 - Computing statistics for split train
+2026-01-08 15:38:34.042 | INFO     | mllam_data_prep.create_dataset:create_dataset_zarr:356 - Writing dataset to zarr
+/var/lib/slurm/slurmd/job15061733/slurm_script: line 16: 2118949 Killed                  python -m mllam_data_prep danra_model1_config.yaml
+slurmstepd: error: Detected 1 oom_kill event in StepId=15061733.batch. Some of the step tasks have been OOM Killed.

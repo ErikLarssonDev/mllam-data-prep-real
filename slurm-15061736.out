@@ -1,0 +1,98 @@
+***********************************
+You have loaded a Mambaforge module
+***********************************
+---------------------------------------------------------------------------------------------------
+NOTE: NSC strongly advices against placing 'mamba activate' (or 'conda
+activate', with or without
+      arguments) or conda initialize commands in your shell initialization
+files, (e.g. '.bashrc' or '.bash_profile') since
+      this severely alters the environment for running software in ways that
+cause unpredictable
+      issues that can be difficult to diagnose.
+---------------------------------------------------------------------------------------------------
+
+W&B online. Running your script from this directory will now sync to the cloud.
+2026-01-08 15:36:11.383 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset era5_sl from /proj/berzelius-2022-164/weather/era5/weatherbench2/era_danra_model1_subset.zarr
+2026-01-08 15:36:12.666 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset era5_sl
+2026-01-08 15:36:12.673 | INFO     | mllam_data_prep.create_dataset:create_dataset:188 - Deriving variables from era5_sl
+2026-01-08 15:36:12.683 | INFO     | mllam_data_prep.ops.derive_variable.physical_field:calculate_toa_radiation:36 - Calculating top-of-atmosphere incoming radiation
+2026-01-08 15:36:21.296 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+2026-01-08 15:36:26.719 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+2026-01-08 15:36:32.832 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+2026-01-08 15:36:38.519 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+2026-01-08 15:36:44.257 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset era5_sl to forcing
+2026-01-08 15:36:48.843 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset era5_pl from /proj/berzelius-2022-164/weather/era5/weatherbench2/era_danra_model1_subset.zarr
+2026-01-08 15:36:49.010 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset era5_pl
+2026-01-08 15:36:49.258 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset era5_pl to forcing
+2026-01-08 15:36:51.315 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset era5_static from /proj/berzelius-2022-164/weather/era5/weatherbench2/era_danra_model1_subset.zarr
+2026-01-08 15:36:51.417 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset era5_static
+2026-01-08 15:36:51.418 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset era5_static to static
+2026-01-08 15:36:51.435 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `forcing`
+2026-01-08 15:36:51.812 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `static`
+2026-01-08 15:36:51.818 | INFO     | mllam_data_prep.create_dataset:create_dataset:251 - Chunking dataset with {'time': 1}
+2026-01-08 15:36:55.885 | INFO     | mllam_data_prep.create_dataset:create_dataset:259 - Setting splitting information to define `['train', 'val', 'test']` splits along dimension `time`
+2026-01-08 15:36:57.659 | INFO     | mllam_data_prep.create_dataset:create_dataset:269 - Computing statistics for split train
+2026-01-08 15:37:00.570 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_sl_state from /proj/berzelius-2022-164/weather/danra/danra_model1_single_levels.zarr
+2026-01-08 15:37:00.641 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset danra_sl_state
+2026-01-08 15:37:00.646 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_sl_state to state
+2026-01-08 15:37:01.331 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_pl_state from /proj/berzelius-2022-164/weather/danra/danra_model1_pressure_levels.zarr
+2026-01-08 15:37:01.408 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset danra_pl_state
+2026-01-08 15:37:02.004 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_pl_state to state
+2026-01-08 15:37:11.230 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_static from /proj/berzelius-2022-164/weather/danra/danra_v0.5.0_static_fields.zarr
+2026-01-08 15:37:11.285 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset danra_static
+2026-01-08 15:37:11.286 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_static to static
+2026-01-08 15:37:11.312 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset danra_forcing from /proj/berzelius-2022-164/weather/danra/danra_model1_single_levels.zarr
+2026-01-08 15:37:11.367 | INFO     | mllam_data_prep.create_dataset:create_dataset:188 - Deriving variables from danra_forcing
+2026-01-08 15:37:11.379 | INFO     | mllam_data_prep.ops.derive_variable.physical_field:calculate_toa_radiation:36 - Calculating top-of-atmosphere incoming radiation
+2026-01-08 15:37:26.146 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+2026-01-08 15:37:40.349 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+2026-01-08 15:37:50.359 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+2026-01-08 15:38:00.340 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+2026-01-08 15:38:15.108 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset danra_forcing to forcing
+2026-01-08 15:38:17.660 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `state`
+2026-01-08 15:38:17.854 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `static`
+2026-01-08 15:38:17.858 | INFO     | mllam_data_prep.create_dataset:_merge_dataarrays_by_target:63 - Merging dataarrays for target variable `forcing`
+2026-01-08 15:38:18.140 | INFO     | mllam_data_prep.create_dataset:create_dataset:251 - Chunking dataset with {'time': 1, 'state_feature': 20}
+2026-01-08 15:39:16.709 | INFO     | mllam_data_prep.create_dataset:create_dataset:259 - Setting splitting information to define `['train', 'val', 'test']` splits along dimension `time`
+2026-01-08 15:39:17.415 | INFO     | mllam_data_prep.create_dataset:create_dataset:269 - Computing statistics for split train
+2026-01-08 15:39:40.858 | INFO     | mllam_data_prep.create_dataset:create_dataset:308 - Cropping dataset using margin of 400000.0 meters in projection space (including interior points of danra_model1_config.yaml dataset 
+2026-01-08 15:39:43.796 | INFO     | mllam_data_prep.create_dataset:create_dataset_zarr:356 - Writing dataset to zarr
+2026-01-08 16:15:27.617 | INFO     | mllam_data_prep.create_dataset:create_dataset_zarr:376 - Wrote training-ready dataset to overlapping_era_400km_model1_config.zarr
+2026-01-08 16:15:27.617 | INFO     | mllam_data_prep.create_dataset:create_dataset_zarr:378 - <xarray.Dataset> Size: 210GB
+Dimensions:                         (forcing_feature: 58, time: 30429,
+                                     grid_index: 14858, static_feature: 2,
+                                     split_name: 3, split_part: 2)
+Coordinates: (12/14)
+  * time                            (time) datetime64[ns] 243kB 2000-01-01 .....
+    longitude                       (grid_index) float32 59kB dask.array<chunksize=(14858,), meta=np.ndarray>
+    latitude                        (grid_index) float32 59kB dask.array<chunksize=(14858,), meta=np.ndarray>
+  * forcing_feature                 (forcing_feature) <U23 5kB 'mean_sea_leve...
+    forcing_feature_units           (forcing_feature) <U10 2kB dask.array<chunksize=(58,), meta=np.ndarray>
+    forcing_feature_long_name       (forcing_feature) <U47 11kB dask.array<chunksize=(58,), meta=np.ndarray>
+    ...                              ...
+    static_feature_units            (static_feature) <U10 80B dask.array<chunksize=(2,), meta=np.ndarray>
+    static_feature_long_name        (static_feature) <U13 104B dask.array<chunksize=(2,), meta=np.ndarray>
+    static_feature_source_dataset   (static_feature) <U11 88B dask.array<chunksize=(2,), meta=np.ndarray>
+  * split_name                      (split_name) <U5 60B 'train' 'val' 'test'
+  * split_part                      (split_part) <U5 40B 'start' 'end'
+  * grid_index                      (grid_index) int64 119kB 53 54 ... 49881
+Data variables:
+    forcing                         (forcing_feature, time, grid_index) float64 210GB dask.array<chunksize=(58, 1, 14858), meta=np.ndarray>
+    static                          (static_feature, grid_index) float32 119kB dask.array<chunksize=(2, 14858), meta=np.ndarray>
+    forcing__train__mean            (forcing_feature) float64 464B dask.array<chunksize=(58,), meta=np.ndarray>
+    static__train__mean             (static_feature) float32 8B dask.array<chunksize=(2,), meta=np.ndarray>
+    forcing__train__std             (forcing_feature) float64 464B dask.array<chunksize=(58,), meta=np.ndarray>
+    static__train__std              (static_feature) float32 8B dask.array<chunksize=(2,), meta=np.ndarray>
+    forcing__train__diff_mean       (forcing_feature) float64 464B dask.array<chunksize=(58,), meta=np.ndarray>
+    forcing__train__diff_std        (forcing_feature) float64 464B dask.array<chunksize=(58,), meta=np.ndarray>
+    splits                          (split_name, split_part) <U16 384B '2000-...
+Attributes:
+    schema_version:   v0.5.0
+    dataset_version:  v0.1.0
+    created_on:       2026-01-08T15:39:40
+    created_with:     mllam-data-prep (https://github.com/mllam/mllam-data-prep)
+    mdp_version:      v0.5.0
+Projecting to DANRA grid
+Projection config: {'projection': {'class_name': 'LambertConformal', 'kwargs': {'central_longitude': 25.0, 'central_latitude': 56.7, 'standard_parallels': [56.7, 56.7], 'globe': {'semimajor_axis': 6367470.0, 'semiminor_axis': 6367470.0}}}}
+Projection globe: {'class_name': 'LambertConformal', 'kwargs': {'central_longitude': 25.0, 'central_latitude': 56.7, 'standard_parallels': [56.7, 56.7], 'globe': {'semimajor_axis': 6367470.0, 'semiminor_axis': 6367470.0}}}
+Projection class: LambertConformal

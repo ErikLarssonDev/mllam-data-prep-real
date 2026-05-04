@@ -1,0 +1,214 @@
+schema_version: v0.5.0
+dataset_version: v0.1.0
+
+dataset:
+  name: meps_example_reduced
+  num_forcing_features: 16
+  var_longnames:
+  - pres_heightAboveGround_0_instant
+  - pres_heightAboveSea_0_instant
+  - nlwrs_heightAboveGround_0_accum
+  - nswrs_heightAboveGround_0_accum
+  - r_heightAboveGround_2_instant
+  - r_hybrid_65_instant
+  - t_heightAboveGround_2_instant
+  - t_hybrid_65_instant
+  var_names:
+  - pres_0g
+  - pres_0s
+  - nlwrs_0
+  - nswrs_0
+  - r_2
+  - r_65
+  - t_2
+  - t_65
+  var_units:
+  - Pa
+  - Pa
+  - W/m**2
+  - W/m**2
+  - ''
+  - ''
+  - K
+  - K
+  num_timesteps: 65
+  num_ensemble_members: 2
+  step_length: 3
+grid_shape_state:
+- 134
+- 119
+projection:
+  class_name: LambertConformal
+  kwargs:
+    central_latitude: 63.3
+    central_longitude: 15.0
+    standard_parallels:
+    - 63.3
+    - 63.3
+
+
+
+output:
+  variables:
+    static: [grid_index, static_feature]
+    state: [time, grid_index, state_feature]
+    forcing: [time, grid_index, forcing_feature]
+  coord_ranges:
+    time:
+      start: 2021-04-01T00:00
+      end: 2023-03-31T00:00
+      step: PT3H
+  chunking:
+    time: 1
+    state_feature: 20
+  splitting:
+    dim: time
+    splits:
+      train:
+        start: 2021-04-01T00:00
+        end: 2022-06-30T00:00
+        compute_statistics:
+          ops: [mean, std, diff_mean, diff_std]
+          dims: [grid_index, time]
+      val:
+        start: 2022-07-01T00:00
+        end: 2023-03-31T00:00
+      test:
+        start: 2022-07-01T00:00
+        end: 2023-03-31T00:00
+
+inputs:
+  danra_sl_state:
+    path: /proj/berzelius-2022-164/weather/danra/danra_model1_single_levels.zarr
+    dims: [time, x, y]
+    variables:
+      - pres_0g
+      - pres_0s
+      - nlwrs_0
+      - nswrs_0
+      - r_2
+      - r_65
+      - t_2
+      - t_65
+      - t_500
+      - t_850
+      - u_65
+      - u_850
+      - v_65
+      - v_850
+      - wvint_0
+      - z_1000
+      - z_500
+    dim_mapping:
+      time:
+        method: rename
+        dim: time
+      grid_index:
+        method: stack
+        dims: [x, y]
+      state_feature:
+        method: stack_variables_by_var_name
+        name_format: "{var_name}"
+    target_output_variable: state
+
+  # meps_pl_state:
+  #   path: /proj/berzelius-2022-164/weather/danra/danra_model1_pressure_levels.zarr
+  #   dims: [time, x, y, pressure]
+  #   variables:
+  #     z:
+  #       pressure:
+  #         values: [500, 1000,]
+  #         units: hPa
+  #     t:
+  #       pressure:
+  #         values: [500, 850,]
+  #         units: hPa
+  #     u:
+  #       pressure:
+  #         values: [850,]
+  #         units: hPa
+  #     v:
+  #       pressure:
+  #         values: [850,]
+  #         units: hPa
+  #   dim_mapping:
+  #     time:
+  #       method: rename
+  #       dim: time
+  #     state_feature:
+  #       method: stack_variables_by_var_name
+  #       dims: [pressure]
+  #       name_format: "{var_name}{pressure}"
+  #     grid_index:
+  #       method: stack
+  #       dims: [x, y]
+  #   target_output_variable: state
+
+  meps_static:
+    path: /proj/berzelius-2022-164/weather/danra/danra_v0.5.0_static_fields.zarr
+    dims: [x, y]
+    variables:
+      - lsm
+      - orography
+    dim_mapping:
+      grid_index:
+        method: stack
+        dims: [x, y]
+      static_feature:
+        method: stack_variables_by_var_name
+        name_format: "{var_name}"
+    target_output_variable: static
+
+  meps_forcing:
+    path: /proj/berzelius-2022-164/weather/danra/danra_model1_single_levels.zarr
+    dims: [time, x, y]
+    derived_variables:
+      # derive variables to be used as forcings
+      toa_radiation:
+        kwargs:
+          time: ds_input.time
+          lat: ds_input.lat
+          lon: ds_input.lon
+        function: mllam_data_prep.ops.derive_variable.physical_field.calculate_toa_radiation
+      hour_of_day_sin:
+        kwargs:
+          time: ds_input.time
+          component: sin
+        function: mllam_data_prep.ops.derive_variable.time_components.calculate_hour_of_day
+      hour_of_day_cos:
+        kwargs:
+          time: ds_input.time
+          component: cos
+        function: mllam_data_prep.ops.derive_variable.time_components.calculate_hour_of_day
+      day_of_year_sin:
+        kwargs:
+          time: ds_input.time
+          component: sin
+        function: mllam_data_prep.ops.derive_variable.time_components.calculate_day_of_year
+      day_of_year_cos:
+        kwargs:
+          time: ds_input.time
+          component: cos
+        function: mllam_data_prep.ops.derive_variable.time_components.calculate_day_of_year
+    dim_mapping:
+      time:
+        method: rename
+        dim: time
+      grid_index:
+        method: stack
+        dims: [x, y]
+      forcing_feature:
+        method: stack_variables_by_var_name
+        name_format: "{var_name}"
+    target_output_variable: forcing
+
+extra:
+  projection:
+    class_name: LambertConformal
+    kwargs:
+      central_longitude: 25.0
+      central_latitude: 56.7
+      standard_parallels: [56.7, 56.7]
+      globe:
+        semimajor_axis: 6367470.0
+        semiminor_axis: 6367470.0
