@@ -1,0 +1,55 @@
+***********************************
+You have loaded a Mambaforge module
+***********************************
+---------------------------------------------------------------------------------------------------
+NOTE: NSC strongly advices against placing 'mamba activate' (or 'conda
+activate', with or without
+      arguments) or conda initialize commands in your shell initialization
+files, (e.g. '.bashrc' or '.bash_profile') since
+      this severely alters the environment for running software in ways that
+cause unpredictable
+      issues that can be difficult to diagnose.
+---------------------------------------------------------------------------------------------------
+
+W&B online. Running your script from this directory will now sync to the cloud.
+2026-05-05 08:47:35.194 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset ifs_sl_test from /proj/berzelius-2022-164/weather/ifs_forecasts/ifs_danra_model1_subset.zarr
+/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/ops/loading.py:21: FutureWarning: In a future version of xarray decode_timedelta will default to False rather than None. To silence this warning, set decode_timedelta to True, False, or a 'CFTimedeltaCoder' instance.
+  ds = xr.open_zarr(fp)
+2026-05-05 08:47:38.119 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset ifs_sl_test
+2026-05-05 08:47:38.121 | INFO     | mllam_data_prep.create_dataset:create_dataset:188 - Deriving variables from ifs_sl_test
+2026-05-05 08:47:38.122 | WARNING  | mllam_data_prep.ops.chunking:check_chunk_size:41 - The chunk size for 'time' exceeds '1073741824' GB.
+2026-05-05 08:47:38.122 | WARNING  | mllam_data_prep.ops.chunking:check_chunk_size:41 - The chunk size for 'prediction_timedelta' exceeds '1073741824' GB.
+2026-05-05 08:47:38.122 | WARNING  | mllam_data_prep.ops.chunking:check_chunk_size:41 - The chunk size for 'latitude' exceeds '1073741824' GB.
+2026-05-05 08:47:38.122 | WARNING  | mllam_data_prep.ops.chunking:check_chunk_size:41 - The chunk size for 'longitude' exceeds '1073741824' GB.
+2026-05-05 08:47:38.124 | INFO     | mllam_data_prep.ops.derive_variable.physical_field:calculate_toa_radiation:36 - Calculating top-of-atmosphere incoming radiation
+[                                        ] | 0% Completed | 295.63 us[########################################] | 100% Completed | 100.75 ms
+[                                        ] | 0% Completed | 155.33 us[########################################] | 100% Completed | 100.64 ms
+[                                        ] | 0% Completed | 155.40 us[########################################] | 100% Completed | 100.56 ms
+[                                        ] | 0% Completed | 155.49 us[########################################] | 100% Completed | 100.56 ms
+2026-05-05 08:47:38.557 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+[                                        ] | 0% Completed | 158.66 us[########################################] | 100% Completed | 100.68 ms
+[                                        ] | 0% Completed | 161.50 us[########################################] | 100% Completed | 100.55 ms
+2026-05-05 08:47:38.769 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+[                                        ] | 0% Completed | 161.09 us[########################################] | 100% Completed | 100.56 ms
+[                                        ] | 0% Completed | 152.76 us[########################################] | 100% Completed | 100.56 ms
+2026-05-05 08:47:38.981 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+[                                        ] | 0% Completed | 162.72 us[########################################] | 100% Completed | 100.70 ms
+[                                        ] | 0% Completed | 157.46 us[########################################] | 100% Completed | 100.57 ms
+2026-05-05 08:47:39.193 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_day_of_year:90 - Calculating day of year
+[                                        ] | 0% Completed | 157.73 us[########################################] | 100% Completed | 100.56 ms
+[                                        ] | 0% Completed | 152.18 us[########################################] | 100% Completed | 100.56 ms
+2026-05-05 08:47:39.404 | INFO     | mllam_data_prep.create_dataset:create_dataset:217 - Mapping dimensions and variables for dataset ifs_sl_test to forcing
+Traceback (most recent call last):
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/__main__.py", line 80, in <module>
+    create_dataset_zarr(fp_config=args.config, fp_zarr=args.output)
+  File "/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/create_dataset.py", line 354, in create_dataset_zarr
+    ds = create_dataset(config=config)
+  File "/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/create_dataset.py", line 240, in create_dataset
+    da_target = select_by_kwargs(da_target, **selection_kwargs)
+  File "/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/ops/selection.py", line 78, in select_by_kwargs
+    raise ValueError(
+ValueError: Provided start value for coordinate analysis_time (2016-01-01 00:00:00) is not in the data.Coord analysis_time spans [2019-10-29T00:00:00.000000000, 2020-10-29T00:00:00.000000000]

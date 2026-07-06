@@ -1,0 +1,42 @@
+***********************************
+You have loaded a Mambaforge module
+***********************************
+---------------------------------------------------------------------------------------------------
+NOTE: NSC strongly advices against placing 'mamba activate' (or 'conda
+activate', with or without
+      arguments) or conda initialize commands in your shell initialization
+files, (e.g. '.bashrc' or '.bash_profile') since
+      this severely alters the environment for running software in ways that
+cause unpredictable
+      issues that can be difficult to diagnose.
+---------------------------------------------------------------------------------------------------
+
+W&B online. Running your script from this directory will now sync to the cloud.
+Traceback (most recent call last):
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/__main__.py", line 80, in <module>
+    create_dataset_zarr(fp_config=args.config, fp_zarr=args.output)
+  File "/proj/berzelius-2022-164/users/x_erila/mllam-data-prep-real/mllam_data_prep/create_dataset.py", line 352, in create_dataset_zarr
+    config = Config.from_yaml_file(file=fp_config)
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/site-packages/dataclass_wizard/wizard_mixins.py", line 172, in from_yaml_file
+    return cls.from_yaml(in_file, decoder=decoder,
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/site-packages/dataclass_wizard/wizard_mixins.py", line 164, in from_yaml
+    return fromdict(cls, o) if isinstance(o, dict) else fromlist(cls, o)
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/site-packages/dataclass_wizard/loaders.py", line 571, in fromdict
+    return load(d)
+  File "<string>", line 22, in cls_fromdict
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/site-packages/dataclass_wizard/parsers.py", line 560, in __call__
+    return self.hook(o, self.base_type, self.key_parser, self.val_parser)
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/site-packages/dataclass_wizard/loaders.py", line 177, in load_to_dict
+    return base_type(
+  File "/home/x_erila/.conda/envs/real-lam/lib/python3.10/site-packages/dataclass_wizard/loaders.py", line 178, in <genexpr>
+    (key_parser(k), val_parser(v))
+  File "<string>", line 36, in cls_fromdict
+dataclass_wizard.errors.MissingFields: Failure calling constructor method of class `InputDataset`. Missing values for required dataclass fields.
+  have fields: ['path', 'variables', 'derived_variables', 'dim_mapping', 'target_output_variable']
+  missing fields: ['dims']
+  input JSON object: {"path": "/proj/berzelius-2022-164/weather/ifs_forecasts/scripts/ifs_2018_danra_model1_subset_lat_desc.zarr", "variables": ["mean_sea_level_pressure", "2m_temperature", "10m_u_component_of_wind", "10m_v_component_of_wind", "surface_pressure"], "derived_variables": {"toa_radiation": {"kwargs": {"time": "ds_input.time", "lead_time": "ds_input.prediction_timedelta", "lat": "ds_input.latitude", "lon": "ds_input.longitude"}, "function": "mllam_data_prep.ops.derive_variable.physical_field.calculate_toa_radiation"}, "hour_of_day_sin": {"kwargs": {"time": "ds_input.time", "lead_time": "ds_input.prediction_timedelta", "component": "sin"}, "function": "mllam_data_prep.ops.derive_variable.time_components.calculate_hour_of_day"}, "hour_of_day_cos": {"kwargs": {"time": "ds_input.time", "lead_time": "ds_input.prediction_timedelta", "component": "cos"}, "function": "mllam_data_prep.ops.derive_variable.time_components.calculate_hour_of_day"}, "day_of_year_sin": {"kwargs": {"time": "ds_input.time", "lead_time": "ds_input.prediction_timedelta", "component": "sin"}, "function": "mllam_data_prep.ops.derive_variable.time_components.calculate_day_of_year"}, "day_of_year_cos": {"kwargs": {"time": "ds_input.time", "lead_time": "ds_input.prediction_timedelta", "component": "cos"}, "function": "mllam_data_prep.ops.derive_variable.time_components.calculate_day_of_year"}}, "dim_mapping": {"analysis_time": {"method": "rename", "dim": "time"}, "elapsed_forecast_duration": {"method": "rename", "dim": "prediction_timedelta"}, "forcing_feature": {"method": "stack_variables_by_var_name", "name_format": "{var_name}"}, "grid_index": {"method": "stack", "dims": ["longitude", "latitude"]}}, "target_output_variable": "forcing"}
+  error: InputDataset.__init__() missing 1 required positional argument: 'dims'

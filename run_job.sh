@@ -3,8 +3,8 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=erila85@liu.se
 #SBATCH --output ./slurm_logs/%A_%x.out
-#SBATCH -p berzelius-cpu -n1 -c12
-#SBATCH -J IFS_TEST
+#SBATCH -p berzelius-cpu -n1 -c64
+#SBATCH -J IFS_DATA_ALL
 # --reservation=1g.10gb
 
 source ~/.bashrc
@@ -18,4 +18,7 @@ wandb online
 # python -m mllam_data_prep danra_model3_config.yaml --output model3 --show-progress
 # python -m mllam_data_prep danra_model3_config.yaml --output model3/danra_model3_config.zarr --show-progress
 # python -m mllam_data_prep overlapping_ifs_val_400km_model1_config.yaml --output run_output/overlapping_ifs_val_400km_model1_config.zarr --show-progress
-python -m mllam_data_prep overlapping_ifs_test_400km_model1_config.yaml --output run_output/overlapping_ifs_test_400km_model1_config.zarr --show-progress
+# python -m mllam_data_prep overlapping_ifs_test_400km_model1_config.yaml --output run_output/overlapping_ifs_test_400km_model1_config.zarr --show-progress
+# python -m mllam_data_prep overlapping_ifs_test_7deg_model1_config.yaml --output run_output/overlapping_ifs_test_7deg_model1_config.zarr --show-progress
+python -m mllam_data_prep overlapping_ifs_all_400km_model1_config.yaml --output run_output/overlapping_ifs_all_400km_model1_config.zarr --show-progress
+

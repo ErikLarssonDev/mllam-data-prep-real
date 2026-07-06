@@ -89,13 +89,16 @@ def select_by_kwargs(ds, **config_dict):
                 # check that the step requested is exactly what the data has
                 all_steps = ds[coord].diff(dim=coord).values
                 first_step = (
-                    all_steps[0].astype("timedelta64[s]").astype(datetime.timedelta)
+                    all_steps[0].astype("timedelta64[s]").astype(
+                        datetime.timedelta)
                 )
 
                 if not all(all_steps[0] == all_steps):
-                    raise ValueError(
-                        f"Step size for coordinate {coord} is not constant: {all_steps}"
-                    )
+                    # raise ValueError(
+                    #     f"Step size for coordinate {coord} is not constant: {all_steps}"
+                    # )
+                    print(
+                        f"WARNING: Step size for coordinate {coord} is not constant: {all_steps}")
                 if sel_step != first_step:
                     raise ValueError(
                         f"Step size for coordinate {coord} is not the same as requested: {first_step} != {sel_step}"

@@ -1,0 +1,23 @@
+***********************************
+You have loaded a Mambaforge module
+***********************************
+---------------------------------------------------------------------------------------------------
+NOTE: NSC strongly advices against placing 'mamba activate' (or 'conda
+activate', with or without
+      arguments) or conda initialize commands in your shell initialization
+files, (e.g. '.bashrc' or '.bash_profile') since
+      this severely alters the environment for running software in ways that
+cause unpredictable
+      issues that can be difficult to diagnose.
+---------------------------------------------------------------------------------------------------
+
+W&B online. Running your script from this directory will now sync to the cloud.
+2026-05-04 19:15:05.654 | INFO     | mllam_data_prep.create_dataset:create_dataset:160 - Loading dataset era5_sl from /proj/berzelius-2022-164/weather/era5/weatherbench2/era_danra_model1_subset.zarr
+2026-05-04 19:15:08.573 | INFO     | mllam_data_prep.create_dataset:create_dataset:171 - Extracting selected variables from dataset era5_sl
+2026-05-04 19:15:08.576 | INFO     | mllam_data_prep.create_dataset:create_dataset:188 - Deriving variables from era5_sl
+2026-05-04 19:15:08.582 | INFO     | mllam_data_prep.ops.derive_variable.physical_field:calculate_toa_radiation:36 - Calculating top-of-atmosphere incoming radiation
+[                                        ] | 0% Completed | 342.00 us[                                        ] | 0% Completed | 421.77 ms[                                        ] | 0% Completed | 533.09 ms[                                        ] | 0% Completed | 643.46 ms[                                        ] | 0% Completed | 753.85 ms[##                                      ] | 5% Completed | 859.92 ms[#####                                   ] | 12% Completed | 960.97 ms[#######                                 ] | 19% Completed | 1.06 s[##########                              ] | 26% Completed | 1.16 s[#############                           ] | 33% Completed | 1.27 s[################                        ] | 41% Completed | 1.37 s[###################                     ] | 48% Completed | 1.47 s[######################                  ] | 55% Completed | 1.57 s[#########################               ] | 62% Completed | 1.67 s[###########################             ] | 69% Completed | 1.78 s[##############################          ] | 77% Completed | 1.88 s[#################################       ] | 84% Completed | 1.98 s[####################################    ] | 91% Completed | 2.08 s[####################################### ] | 98% Completed | 2.18 s[########################################] | 100% Completed | 2.28 s
+[                                        ] | 0% Completed | 216.34 us[########################################] | 100% Completed | 100.60 ms
+[                                        ] | 0% Completed | 153.20 us[########################################] | 100% Completed | 100.51 ms
+2026-05-04 19:15:14.861 | INFO     | mllam_data_prep.ops.derive_variable.time_components:calculate_hour_of_day:32 - Calculating hour of day
+[2026-05-04T19:15:15.614] error: *** JOB 16494018 ON node222 CANCELLED AT 2026-05-04T19:15:15 DUE to SIGNAL Terminated ***
